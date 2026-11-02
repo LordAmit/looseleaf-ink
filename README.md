@@ -10,8 +10,6 @@ MIT License, same as Looseleaf. See `LICENSE` and `LICENSE-looseleaf`.
 
 ## Getting started
 
-There is no npm package yet. Copy the built files into your project.
-
 1. Get the files. Either clone this repo, or download `dist/` from it. You need `dist/ink.js` (or `dist/ink.esm.js`),
    `dist/ink.css`, and `dist/fonts/` if you want Kevin Sans. Copy them to, say, `vendor/` in your site.
 
