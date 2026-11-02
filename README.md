@@ -65,10 +65,15 @@ MIT License, same as Looseleaf. See `LICENSE` and `LICENSE-looseleaf`.
 5. See it working: `npm run example` and open http://localhost:8731/example/. The example page has recipes for a card,
    a message slip, a button, an input, and an arrow between two elements.
 
-## What it does
+## What looseleaf-ink does
 
-You give it a width, a height and a seed. It gives you SVG that looks like a felt pen, a pencil, a marker or a
-highlighter on paper. It knows nothing about HTML. You put the SVG behind whatever element you like.
+`ink.js` exposes one global, `Ink`. Its `Ink.Ink` class is a drawing builder: you create one with a seed, call shape
+and fill helpers such as `Ink.box` and `Ink.bandFill` on it with coordinates, and read back an SVG string from
+`toSvg`. The strokes in that SVG look like a felt pen, a pencil, a marker or a highlighter on paper, because the pen
+model adds wobble, pressure, dry-out and grain to the geometry you gave it.
+
+The library has no knowledge of HTML elements. Your code measures an element, asks the builder for an SVG of that
+size, and places the SVG behind the element. The `inkify` helper above is the whole pattern.
 
 ```html
 <link rel="stylesheet" href="dist/ink.css">
