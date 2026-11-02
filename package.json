@@ -1,0 +1,16 @@
+{
+  "name": "looseleaf-ink",
+  "version": "0.1.0",
+  "description": "Unofficial standalone bundle of Looseleaf's ink core: hand-drawn pens, fills and shapes as SVG, no React.",
+  "license": "MIT",
+  "type": "module",
+  "main": "dist/ink.js",
+  "module": "dist/ink.esm.js",
+  "files": ["dist", "src", "UPSTREAM.md", "LICENSE", "LICENSE-looseleaf"],
+  "scripts": {
+    "build": "esbuild src/entry.ts --bundle --format=iife --global-name=Ink --minify --target=es2020 \"--banner:js=$(cat src/banner.txt)\" --outfile=dist/ink.js && esbuild src/entry.ts --bundle --format=esm --minify --target=es2020 \"--banner:js=$(cat src/banner.txt)\" --outfile=dist/ink.esm.js && cp src/ink.css dist/ink.css",
+    "sync": "scripts/sync.sh",
+    "example": "python3 -m http.server 8731 --directory ."
+  },
+  "devDependencies": { "esbuild": "0.25.0" }
+}

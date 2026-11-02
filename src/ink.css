@@ -1,0 +1,16 @@
+/* ink.css — paint tokens and fonts for ink.js, taken from Looseleaf (https://github.com/kevintngo/looseleaf),
+   MIT License, Copyright (c) 2026 Looseleaf contributors. Kevin Sans is by Kevin Ngo, MIT. */
+@font-face{font-family:"Kevin Sans";src:url("fonts/KevinSans-Regular.woff2") format("woff2");font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:"Kevin Sans";src:url("fonts/KevinSans-Bold.woff2") format("woff2");font-weight:700;font-style:normal;font-display:swap}
+:root{
+  --ll-paper:#f8f5ee; --ll-paper-shade:#ece6da; --ll-slip:#fbf8f1; --ll-card:#fbf6e9; --ll-graph:#f4f7ef; --ll-kraft:#dcc8a3;
+  --ll-check:#dfe9d8; --ll-pad:#f8f2de; --ll-photo:#fffdf6; --ll-desk:#a8c8bb; --ll-desk-deep:#93b4a7;
+  --ll-rule-blue:#8fb0d4; --ll-rule-red:#d9776a; --ll-pad-rule:#b2c3dc; --ll-check-rule:#7fa37c;
+  --ll-sticky-yellow:#f7e38a; --ll-sticky-green:#cfe6a8; --ll-sticky-orange:#f7c08e; --ll-sticky-pink:#f6b8b0; --ll-sticky-blue:#bcd8f0;
+  --ll-ink:#2a2420; --ll-ink-soft:#4a423b; --ll-ink-muted:#4a433c; --ll-ink-you:#2c4f9e; --ll-pencil:#6b6660; --ll-pencil-text:#5a554e; --ll-pencil-mark:#8e887f;
+  --ll-red:#c2412d; --ll-green:#3b7a4b; --ll-marker:#df6b3c; --ll-orange-text:#a4502a; --ll-hi:#f8dc4c; --ll-hi-deep:#a87f0c; --ll-focus:#2c4f9e;
+  --ll-tomato:#e8483a; --ll-tangerine:#f59a2f; --ll-lemon:#fbd63a; --ll-grass:#5db85c; --ll-teal:#2fb1a3; --ll-sky:#4aa8e8; --ll-grape:#8f6fd6; --ll-bubblegum:#f38bb8;
+  --ll-tape:rgb(246 244 236 / .5); --ll-tape-edge:rgb(140 135 120 / .35);
+  --ll-shade:58 44 30; --ll-blend:multiply;
+  --ll-shadow-paper:0 1px 1.5px rgb(var(--ll-shade) / .2),0 2px 5px -1px rgb(var(--ll-shade) / .1),0 12px 22px -8px rgb(var(--ll-shade) / .2);
+}

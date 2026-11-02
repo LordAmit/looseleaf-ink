@@ -1,0 +1,3 @@
+/*! looseleaf-ink — the drawing core of Looseleaf (https://github.com/kevintngo/looseleaf) by Kevin Ngo
+ *  and the Looseleaf contributors, MIT License, bundled standalone without React.
+ *  Unofficial extraction: https://github.com/LordAmit/looseleaf-ink — see UPSTREAM.md for the source commit. */

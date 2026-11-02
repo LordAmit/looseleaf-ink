@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>looseleaf-ink example</title>
+<link rel="stylesheet" href="../dist/ink.css">
+<style>
+  body{margin:0;padding:32px 16px;background:#f2f4f6;color:var(--ll-ink);font-family:"Kevin Sans",cursive;font-size:16px;line-height:1.45}
+  .wrap{max-width:760px;margin:0 auto;display:grid;gap:28px}
+  h1{font-weight:700;font-size:32px;margin:0}
+  p{margin:0;color:var(--ll-pencil-text)}
+  .inked{position:relative;isolation:isolate}
+  .inked>svg.ink{position:absolute;z-index:-1;pointer-events:none;overflow:visible}
+  .card{padding:16px 18px}
+  .row{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+  .slip{padding:7px 12px;font-size:14px}
+  button{font:inherit;font-size:16px;padding:8px 18px;border:0;background:transparent;color:var(--ll-ink);cursor:pointer}
+  button.primary{font-weight:700}
+  input{font:inherit;font-size:16px;padding:8px 10px;border:0;background:transparent;color:var(--ll-ink-you);outline:none;width:220px}
+  input:focus{color:var(--ll-ink)}
+  .arrowpair{position:relative;display:flex;justify-content:space-between;align-items:center;height:90px}
+  .arrowpair .card{width:160px;padding:10px 14px;text-align:center}
+  #overlay{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}
+  .credit{font-size:13px}
+  .credit a{color:inherit}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>looseleaf-ink</h1>
+  <p>Five elements, each with a seeded SVG drawn behind it. Resize the window: every drawing redraws at the new size.</p>
+
+  <div class="inked card" data-ink="card">
+    <strong>A card.</strong> Pencil band fill, soft wash toward the edges, felt-pen outline. Click to toggle the lit state.
+  </div>
+
+  <div class="row">
+    <div class="inked slip" data-ink="slip">a pending message</div>
+    <div class="inked slip done" data-ink="slip">a finished message</div>
+    <div class="inked slip active" data-ink="slip">the active one</div>
+    <div class="inked slip event" data-ink="slip">a process event</div>
+  </div>
+
+  <div class="row">
+    <span class="inked" data-ink="button"><button class="primary">Save changes</button></span>
+    <span class="inked" data-ink="button-ghost"><button>Cancel</button></span>
+    <span class="inked" data-ink="input"><input placeholder="type here" aria-label="example input"></span>
+  </div>
+
+  <div class="arrowpair">
+    <div class="inked card" data-ink="card" id="a">client</div>
+    <svg id="overlay" aria-hidden="true"></svg>
+    <div class="inked card" data-ink="card" id="b">server</div>
+  </div>
+
+  <p class="credit">Drawing engine and Kevin Sans by Kevin Ngo and the <a href="https://github.com/kevintngo/looseleaf">Looseleaf</a> contributors, MIT. This page is from the unofficial <a href="https://github.com/LordAmit/looseleaf-ink">looseleaf-ink</a> bundle.</p>
+</div>
+
+<script src="../dist/ink.js"></script>
+<script>
+const I = window.Ink;
+document.body.insertAdjacentHTML('beforeend', `<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>${I.svgMaskDefs({kinds: I.GRAINS})}</defs></svg>`);
+
+// One recipe per element kind. Each gets the builder, the size, and the element so it can read state classes.
+const RECIPES = {
+  card: {pad: 8, draw(ink, w, h, el) {
+    const body = I.roundRectPoly(1, 1, w - 2, h - 2, 3);
+    I.bandFill(ink, body, 'card', {alpha: .95});
+    I.wash(ink, body, 'paper-shade', {alpha: .3, inset: 6});
+    I.box(ink, 0, 0, w, h, {pen: el.classList.contains('lit') ? 'redfelt' : 'ink', corner: 3});
+  }},
+  slip: {pad: 6, draw(ink, w, h, el) {
+    const c = el.classList, body = I.roundRectPoly(1, 1, w - 2, h - 2, 2);
+    I.bandFill(ink, body, 'slip', {alpha: .9});
+    if (c.contains('active')) I.wash(ink, body, 'hi', {alpha: .5, inset: 3});
+    const pen = c.contains('active') ? 'redfelt' : c.contains('done') ? 'ink' : 'pencil';
+    if (c.contains('event')) I.dashedBox(ink, 0, 0, w, h, {r: 2, pen}); else I.box(ink, 0, 0, w, h, {pen, corner: 2});
+  }},
+  button: {pad: 8, draw(ink, w, h) {
+    const body = I.roundRectPoly(1, 1, w - 2, h - 2, 4);
+    I.bandFill(ink, body, 'hi', {alpha: .85});
+    I.box(ink, 0, 0, w, h, {pen: 'ink', corner: 4});
+  }},
+  'button-ghost': {pad: 8, draw(ink, w, h) {
+    I.box(ink, 0, 0, w, h, {pen: 'pencil', corner: 4});
+  }},
+  input: {pad: 8, draw(ink, w, h) {
+    I.box(ink, 0, 0, w, h, {pen: 'pencil.fine', corner: 2});
+    I.underline(ink, 8, h - 6, w - 16, {pen: 'blue.fine', kind: 'single'});
+  }},
+};
+
+let seq = 0;
+function inkify(el) {
+  const R = RECIPES[el.dataset.ink], seed = 'example-' + el.dataset.ink + '-' + (seq++);
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg.setAttribute('class', 'ink'); svg.setAttribute('aria-hidden', 'true');
+  svg.style.inset = `-${R.pad}px`; svg.style.width = `calc(100% + ${2 * R.pad}px)`; svg.style.height = `calc(100% + ${2 * R.pad}px)`;
+  el.prepend(svg);
+  let last = '';
+  const draw = () => {
+    const w = el.offsetWidth, h = el.offsetHeight; if (!w || !h) return;
+    const key = `${w}x${h}|${el.className}`; if (key === last) return; last = key;
+    const ink = new I.Ink(seed, {tier: 'hi'});
+    ink.layer('rest', () => R.draw(ink, w, h, el));
+    const r = ink.toSvg({w, h, pad: R.pad});
+    svg.setAttribute('viewBox', I.inkViewBox(r)); svg.innerHTML = r.svg;
+  };
+  new ResizeObserver(draw).observe(el);
+  new MutationObserver(draw).observe(el, {attributes: true, attributeFilter: ['class']});
+  draw();
+}
+document.querySelectorAll('[data-ink]').forEach(inkify);
+document.querySelectorAll('.card').forEach(c => c.addEventListener('click', () => c.classList.toggle('lit')));
+
+// An arrow between two elements, drawn on an overlay that covers their common parent.
+const overlay = document.getElementById('overlay');
+function drawArrow() {
+  const p = overlay.parentElement.getBoundingClientRect(), a = document.getElementById('a').getBoundingClientRect(), b = document.getElementById('b').getBoundingClientRect();
+  const w = p.width, h = p.height, x1 = a.right - p.left + 10, x2 = b.left - p.left - 10, y = a.top - p.top + a.height / 2;
+  const ink = new I.Ink('example-arrow', {tier: 'hi'});
+  ink.layer('rest', () => I.arrow(ink, x1, y, x2, y, {pen: 'ink', head: 'v', curve: .08}));
+  const r = ink.toSvg({w, h, pad: 8});
+  overlay.setAttribute('viewBox', I.inkViewBox(r)); overlay.innerHTML = r.svg;
+}
+new ResizeObserver(drawArrow).observe(overlay.parentElement); drawArrow();
+</script>
+</body>
+</html>
