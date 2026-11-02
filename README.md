@@ -94,7 +94,7 @@ highlighter on paper. It knows nothing about HTML. You put the SVG behind whatev
 </script>
 ```
 
-Same seed, same drawing, every time. Redraw when the element resizes or changes state; a `ResizeObserver` and a
+Redraw when the element resizes or changes state; a `ResizeObserver` and a
 `MutationObserver` are enough. `example/index.html` shows a card, a message slip, a button, an input and an arrow.
 
 ## What is in the bundle
@@ -113,11 +113,6 @@ Colours are CSS variables, so a page restyles the ink by overriding `--ll-ink`, 
 
 Sizes: `dist/ink.js` 145 KB, 92 KB gzipped. `dist/ink.esm.js` for `import`. Kevin Sans, the hand font, is 92 KB for
 both weights and optional.
-
-## What is not here
-
-Looseleaf's React components, hooks and state layers. Its stickers, icons, doodles, mascot and charts. Its paper
-texture tiles. If you want any of that, use Looseleaf itself.
 
 ## Updating from upstream
 
